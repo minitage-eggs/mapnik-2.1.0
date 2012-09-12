@@ -31,19 +31,21 @@ def pil(options,buildout):
         ),
     }
     st = open('setup.py').read()
-    locations['include'] = '/usr/include'
+    for i in locations.keys():
+        locations['%s-include' % i ]= locations[i] + "/include"
+        locations['%s-lib' % i ]= locations[i] + "/lib"
     pregex = [
         ("^(FREETYPE_ROOT.*)$",
-         "FREETYPE_ROOT='%(freetype)s' , '%(include)s'" % (
+         "FREETYPE_ROOT='%(freetype-lib)s' , '%(freetype-include)s'" % (
              locations
          )
         ),
         ("^(TIFF_ROOT.*)$",
-         "TIFF_ROOT='%(tiff)s', '%(include)s'" % locations),
+         "TIFF_ROOT='%(tiff-lib)s', '%(jpeg-include)s'" % locations),
         ("^(JPEG_ROOT.*)$",
-         "JPEG_ROOT='%(jpeg)s', '%(include)s'" % locations),
+         "JPEG_ROOT='%(jpeg-lib)s', '%(tiff-include)s'" % locations),
         ("^(ZLIB_ROOT.*)$",
-         "ZLIB_ROOT='%(zlib)s', '%(include)s'" % locations),
+         "ZLIB_ROOT='%(zlib-lib)s', '%(zlib-include)s'" % locations),
     ]
     for p, rep in pregex:
         r= re.compile(p, ref)
